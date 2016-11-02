@@ -10,7 +10,12 @@ class AutocompleteController < ApplicationController
   private
   
   def autocomplete_results
-    query_term.present? ? model.autocomplete_results(query_term) : []
+    return [] unless query_term.present?
+    if filter_param.present?
+      model.autocomplete_results(query_term, filter_param)
+    else
+      model.autocomplete_results(query_term)
+    end
   end
   
   def model
@@ -31,6 +36,10 @@ class AutocompleteController < ApplicationController
     params[query_param_name]
   end
   
+  def filter_param
+    params[:filter]
+  end
+
   def activeadmin_associations_config
     Rails.application.config.activeadmin_associations
   end
