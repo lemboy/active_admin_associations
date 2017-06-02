@@ -19,7 +19,7 @@ class AutocompleteController < ApplicationController
   end
   
   def model
-    params[:model].classify.constantize
+    params[:model].split('::').map(&:classify).join('::').constantize
   end
   
   def query_param_name
